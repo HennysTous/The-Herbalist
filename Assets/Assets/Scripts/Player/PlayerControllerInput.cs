@@ -1,4 +1,5 @@
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerControllerInput : MonoBehaviour
@@ -62,8 +63,21 @@ public class PlayerControllerInput : MonoBehaviour
         //Movement and Jumping
         isGrounded = controller.isGrounded;
 
-        HandleMovement();
         HandleGravityAndJump();
+
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            HandleMovement();
+        }
+        else
+        {
+            MoveDirection = Vector3.zero;
+            animHandler.SetSpeed(0f);
+        }
+
+        // Always Apply input and gravity
+        Vector3 horizontal = MoveDirection.normalized * CurrentSpeed;
+        controller.Move((horizontal + velocity) * Time.deltaTime);
 
         //Animation Handler
         animHandler.SetSpeed(MoveDirection.magnitude);
@@ -72,6 +86,7 @@ public class PlayerControllerInput : MonoBehaviour
 
     void HandleMovement()
     {
+
         Vector3 camForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1)).normalized;
         Vector3 camRight = cameraTransform.right;
 
@@ -85,7 +100,7 @@ public class PlayerControllerInput : MonoBehaviour
         }
 
         Vector3 horizontal = MoveDirection.normalized * CurrentSpeed;
-        controller.Move((horizontal + velocity) * Time.deltaTime);
+    
     }
 
     void HandleGravityAndJump()

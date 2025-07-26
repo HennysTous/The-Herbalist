@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class ThirdPersonCamera : MonoBehaviour
@@ -35,6 +36,8 @@ public class ThirdPersonCamera : MonoBehaviour
 
     void LateUpdate()
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+        
         if (isRotating)
         {
             yaw += lookInput.x * sensitivity;

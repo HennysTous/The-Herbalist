@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f57acce73f7a584e88f8fbd860cc48b, type: 3}
+  m_Name: Mushroom_RedMushroom
+  m_EditorClassIdentifier: 
+  uniqueID: 02
+  itemName: Red Mushroom
+  scientificName: Mushroomita Rojis
+  itemType: 1
+  icon: {fileID: 0}
+  isGolden: 1
+  sellValue: 10
+  speedBuff: {fileID: 11400000, guid: 723cacf85d4e80d489d7364aedc5d2cd, type: 2}
+  description: 

@@ -14,14 +14,14 @@ public class Plant : MonoBehaviour, IInteractable
         var gatherer = player.GetComponent<PlayerGatherer>();
         gatherer?.PlayGatherAnimation();
 
-        print($"{data.itemName} gathered!");
-        Destroy(gameObject);
-        /* TODO
-         * if (InventorySystem.Instance.AddItem(data)) {
+        if (InventorySystem.Instance.AddItem(data))
+        {
+            Debug.Log($"{data.itemName} gathered!");
             Destroy(gameObject);
-        } else {
-            Debug.Log("Inventario lleno");
         }
-         */
+        else
+        {
+            Debug.Log("Inventario lleno. No se pudo recolectar.");
+        }
     }
 }
