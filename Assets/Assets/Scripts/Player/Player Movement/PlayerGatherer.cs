@@ -12,7 +12,7 @@ public class PlayerGatherer : MonoBehaviour
     public void PlayGatherAnimation()
     {
         animationHandler.SetGathering(true);
-        Invoke(nameof(ResetGathering), 0.1f);
+        ResetGathering();
     }
 
     private void ResetGathering()

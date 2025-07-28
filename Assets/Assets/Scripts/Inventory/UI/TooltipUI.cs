@@ -21,13 +21,13 @@ public class TooltipUI : MonoBehaviour
         scientificNameText.text = item.scientificName;
         typeText.text = item.itemType.ToString();
 
-        if (item.itemType.Equals(ItemType.Consumable) && item.speedBuff != null)
+        if (item.itemType.Equals(ItemType.Consumable))
         {
-            effectText.text = item.speedBuff.description;
+            effectText.text = item.description;
         }
         else
         {
-            effectText.text = "Without Effect";
+            effectText.text = "No Effects";
         }
 
 

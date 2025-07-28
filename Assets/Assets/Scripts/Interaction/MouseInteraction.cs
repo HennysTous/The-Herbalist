@@ -6,8 +6,8 @@ public class MouseInteractor : MonoBehaviour
 {
     [Header("Configuration")]
     public LayerMask interactableMask;
-    public Texture2D defaultCursor;
-    public Texture2D interactCursor;
+    private Texture2D defaultCursor;  //TODO Custom cursors
+    private Texture2D interactCursor; //TODO Custom cursors
     public Camera mainCam;
 
     private IInteractable currentHover;

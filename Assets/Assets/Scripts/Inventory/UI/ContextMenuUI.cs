@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,15 +8,23 @@ public class ContextMenuUI : MonoBehaviour
     [SerializeField] private Button deleteButton;
     [SerializeField] private RectTransform panel;
 
+    [SerializeField] private Vector3 menuOffset;
+
     private InventorySlot currentSlot;
     private InventorySlotUI currentUI;
+    private UpgradesManager upgradesManager;
+
+    private void Awake()
+    {
+        upgradesManager = UpgradesManager.Instance;
+    }
 
     public void Show(InventorySlot slot, Vector3 position, InventorySlotUI uiRef)
     {
         currentSlot = slot;
         currentUI = uiRef;
 
-        panel.position = position;
+        panel.position = position + menuOffset;
         gameObject.SetActive(true);
 
         bool isConsumable = slot.item.itemType.Equals(ItemType.Consumable);
@@ -34,9 +43,10 @@ public class ContextMenuUI : MonoBehaviour
 
     private void ConsumeItem()
     {
-        // Aplica el efecto del buff (ej: velocidad)
-        Debug.Log($"You gained {currentSlot.item.itemName}");
 
+        upgradesManager.ApplyUpgrade(currentSlot.item);
+
+        Debug.Log($"You gained {currentSlot.item.itemName}");
         InventorySystem.Instance.RemoveItem(currentSlot.item);
         InventoryUIManager.Instance.HideContextMenu();
     }

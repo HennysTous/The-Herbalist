@@ -35,7 +35,6 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
             iconImage.sprite = slotData.item.icon;
             quantityText.text = slotData.quantity > 1 ? slotData.quantity.ToString() : "";
             iconImage.enabled = true;
-            highlightBorder.enabled = true;
         }
         else
         {
@@ -66,14 +65,22 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
             InventoryUIManager.Instance.HideTooltip();
         }
 
-        highlightBorder.enabled = false;
+       
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if (slotData?.item != null && eventData.button == PointerEventData.InputButton.Right)
         {
-            InventoryUIManager.Instance.ShowContextMenu(slotData, transform.position, this);
+            if (VendorManager.Instance.isVendorActive)
+            {
+                CurrencySystem.Instance.AddCoins(slotData.item.sellValue * slotData.quantity);
+                InventorySystem.Instance.RemoveItem(slotData.item);
+            }
+            else
+            {
+                InventoryUIManager.Instance.ShowContextMenu(slotData, transform.position, this);
+            }
         }
     }
 
@@ -81,21 +88,34 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (slotData?.item == null) return;
-        canvasGroup.blocksRaycasts = false;
-        InventoryUIManager.Instance.BeginDrag(this);
+        if (slotData?.item != null && eventData.button == PointerEventData.InputButton.Left)
+        {
+            canvasGroup.blocksRaycasts = false;
+            quantityText.gameObject.SetActive(false);
+            InventoryUIManager.Instance.BeginDrag(this);
+        }
+            
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        iconImage.rectTransform.position = eventData.position;
+        if (slotData?.item != null && eventData.button == PointerEventData.InputButton.Left)
+        {
+            iconImage.rectTransform.position = eventData.position;
+        }
+            
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        canvasGroup.blocksRaycasts = true;
-        InventoryUIManager.Instance.EndDrag(this);
-        ResetIconPosition();
+        if (slotData?.item != null && eventData.button == PointerEventData.InputButton.Left)
+        {
+            canvasGroup.blocksRaycasts = true;
+            quantityText.gameObject.SetActive(true);
+            InventoryUIManager.Instance.EndDrag(this);
+            ResetIconPosition();
+        }
+            
     }
 
     private void ResetIconPosition()

@@ -12,29 +12,32 @@ public class InventoryUIManager : MonoBehaviour
     [SerializeField] private Transform slotParent;
     [SerializeField] private TooltipUI tooltipPanel;
     [SerializeField] private ContextMenuUI contextMenu;
+    [SerializeField] private GameObject panel;
 
-    private List<InventorySlotUI> uiSlots = new();
+    public List<InventorySlotUI> uiSlots = new();
     private InventorySlotUI draggingSlot;
 
-    void Awake()
+
+    private void Awake()
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
         else Instance = this;
     }
 
-    void Start()
+    private void Start()
     {
         InventorySystem.Instance.OnInventoryChanged += RefreshInventory;
         RefreshInventory();
     }
 
+    // Regenerates the inventory UI to match the current data in InventorySystem.
     public void RefreshInventory()
     {
         foreach (var slot in uiSlots)
             Destroy(slot.gameObject);
         uiSlots.Clear();
 
-        var inventory = InventorySystem.Instance.Slots;
+        var inventory = InventorySystem.Instance.slots;
 
         for (int i = 0; i < inventory.Count; i++)
         {
@@ -44,6 +47,8 @@ public class InventoryUIManager : MonoBehaviour
         }
     }
 
+    
+    // Displays the tooltip panel with item information.
     public void ShowTooltip(InventorySlot slot)
     {
         if (slot == null || slot.item == null)
@@ -57,22 +62,52 @@ public class InventoryUIManager : MonoBehaviour
 
     public void HideTooltip() => tooltipPanel.Hide();
 
+
+    // Displays the context menu for item actions (consume, drop, etc).
     public void ShowContextMenu(InventorySlot slot, Vector3 position, InventorySlotUI uiRef)
     {
-        if (slot?.item == null) return;
         contextMenu.Show(slot, position, uiRef);
     }
 
-    public void HideContextMenu() => contextMenu.Hide();
+    public void HideContextMenu()
+    {
+        contextMenu.Hide();
+    }
 
-    // ---------- DRAG & DROP -----------
 
+    // Activates the inventory UI in normal or vendor mode.
+    public void OpenInventory()
+    {
+        panel.gameObject.SetActive(true);
+        RefreshInventory();
+    }
+
+    public void CloseInventory()
+    {
+        panel.gameObject.SetActive(false);
+    }
+
+    // Checks if inventory is opened.
+    public bool isInventoryOpen()
+    {
+        if (panel.gameObject.active)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    #region Drag & Drop
+
+    // Starts dragging an inventory slot.
     public void BeginDrag(InventorySlotUI slot)
     {
         draggingSlot = slot;
         slot.iconImage.raycastTarget = false;
     }
 
+    // Ends dragging and performs a swap if a target slot is valid.
     public void EndDrag(InventorySlotUI fromSlot)
     {
         InventorySlotUI toSlot = GetSlotUnderMouse();
@@ -85,9 +120,10 @@ public class InventoryUIManager : MonoBehaviour
 
         draggingSlot.iconImage.raycastTarget = true;
         draggingSlot = null;
-        RefreshInventory(); // redraw UI
+        RefreshInventory();
     }
 
+    // Gets the slot currently under the mouse pointer.
     private InventorySlotUI GetSlotUnderMouse()
     {
         PointerEventData eventData = new PointerEventData(EventSystem.current)
@@ -107,4 +143,6 @@ public class InventoryUIManager : MonoBehaviour
 
         return null;
     }
+
+    #endregion
 }

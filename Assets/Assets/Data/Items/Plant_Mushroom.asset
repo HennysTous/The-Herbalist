@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f57acce73f7a584e88f8fbd860cc48b, type: 3}
   m_Name: Plant_Mushroom
   m_EditorClassIdentifier: 
-  uniqueID: 01
+  uniqueID: Mushroom_RedMushroom
   itemName: Red Mushroom
-  scientificName: Shroomita Roja
+  scientificName: Shroomita Rojis
   itemType: 0
   icon: {fileID: 0}
-  isGolden: 0
   sellValue: 10
-  speedBuff: {fileID: 0}
+  speedMultiplier: 0
   description: 

@@ -9,22 +9,18 @@ public enum ItemType
 [CreateAssetMenu(fileName = "ItemData", menuName = "Items/Item Data")]
 public class ItemData : ScriptableObject
 {
-    [Header("Identification")]
+    //Basic Data
     public string uniqueID;              // Save/Load var
     public string itemName;              // Common name
     public string scientificName;        // Scientific Name
     public ItemType itemType;
 
-    [Header("Visual")]
     public Sprite icon;
-    public bool isGolden;                //Rare or Not
 
-    [Header("Economy")]
     public int sellValue;
 
-    [Header("Consumable (only if its ItemType = Consumable")]
-    public SpeedBuffData speedBuff;                // Null
 
-    [TextArea]
+    // Only if its ItemType = Consumable"
+    public float speedMultiplier;
     public string description;
 }

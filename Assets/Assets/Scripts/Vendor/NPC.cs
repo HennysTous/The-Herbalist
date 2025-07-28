@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour, IInteractable
 {
-    [SerializeField] private string npcName = "Charlie Green Jr";
-
-    public string Name => npcName;
+    public string npcName = "Charlie Green Jr";
 
     public string GetInteractionPrompt()
     {
@@ -13,6 +11,6 @@ public class NPC : MonoBehaviour, IInteractable
 
     public void Interact(PlayerControllerInput player)
     {
-        print($"You've talked to {npcName}");
+        VendorManager.Instance.OpenVendor();
     }
 }

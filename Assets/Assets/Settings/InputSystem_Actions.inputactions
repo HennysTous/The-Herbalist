@@ -42,6 +42,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "RotateCamera",
+                    "type": "Button",
+                    "id": "b9f83447-c25c-44aa-985f-a9cd545e857c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Crouch",
                     "type": "Button",
                     "id": "27c5f898-bc57-4ee1-8800-db469aca5fe3",
@@ -81,15 +90,24 @@
                     "name": "Sprint",
                     "type": "Button",
                     "id": "641cd816-40e6-41b4-8c3d-04687c349290",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "RotateCamera",
+                    "name": "OpenInventory",
                     "type": "Button",
-                    "id": "b9f83447-c25c-44aa-985f-a9cd545e857c",
+                    "id": "0a3ffdaa-7516-4522-b110-0f5dda49a018",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "902a9395-6063-4f1f-ad8b-9ce25ba0f074",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -479,6 +497,28 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Touch",
                     "action": "RotateCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d1674ded-daba-439f-b372-9da09653f811",
+                    "path": "<Keyboard>/#(E)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "OpenInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4de4f64b-5819-48dd-bb38-c6052bd50866",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -16,9 +16,9 @@ public class PlayerControllerInput : MonoBehaviour
     [Header("References")]
     public Transform cameraTransform;
 
-
     private CharacterController controller;
     private InputSystem_Actions inputActions;
+    private PlayerAnimationHandler animHandler;
 
     private Vector2 moveInput;
     private Vector3 velocity;
@@ -27,17 +27,16 @@ public class PlayerControllerInput : MonoBehaviour
     private bool isJumpPressed;
     private bool isGrounded;
 
-    private PlayerAnimationHandler animHandler;
-
-    public float CurrentSpeed => isSprinting ? moveSpeed * sprintMultiplier : moveSpeed;
+    public float CurrentSpeed { get; private set; }
     public Vector3 MoveDirection { get; private set; }
+
+    #region Initialization
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
-        inputActions = new InputSystem_Actions();
-
         animHandler = GetComponent<PlayerAnimationHandler>();
+        inputActions = new InputSystem_Actions();
 
         inputActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         inputActions.Player.Move.canceled += _ => moveInput = Vector2.zero;
@@ -46,21 +45,21 @@ public class PlayerControllerInput : MonoBehaviour
         inputActions.Player.Sprint.canceled += _ => isSprinting = false;
 
         inputActions.Player.Jump.performed += _ => isJumpPressed = true;
+
+        inputActions.Player.OpenInventory.performed += _ => ToggleInventory();
+
+        inputActions.Player.Pause.performed += _ => PauseManager.Instance.TogglePause();
     }
 
-    private void OnEnable()
-    {
-        inputActions.Player.Enable();
-    }
+    private void OnEnable() => inputActions.Player.Enable();
+    private void OnDisable() => inputActions.Player.Disable();
 
-    private void OnDisable()
-    {
-        inputActions.Player.Disable();
-    }
+    #endregion
+
+    #region Update Loop
 
     private void Update()
     {
-        //Movement and Jumping
         isGrounded = controller.isGrounded;
 
         HandleGravityAndJump();
@@ -75,18 +74,19 @@ public class PlayerControllerInput : MonoBehaviour
             animHandler.SetSpeed(0f);
         }
 
-        // Always Apply input and gravity
         Vector3 horizontal = MoveDirection.normalized * CurrentSpeed;
         controller.Move((horizontal + velocity) * Time.deltaTime);
 
-        //Animation Handler
         animHandler.SetSpeed(MoveDirection.magnitude);
         animHandler.SetSprinting(isSprinting);
     }
 
-    void HandleMovement()
-    {
+    #endregion
 
+    #region Movement & Gravity
+
+    private void HandleMovement()
+    {
         Vector3 camForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1)).normalized;
         Vector3 camRight = cameraTransform.right;
 
@@ -99,16 +99,15 @@ public class PlayerControllerInput : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
         }
 
-        Vector3 horizontal = MoveDirection.normalized * CurrentSpeed;
-    
+        // Calculate current speed including permanent upgrades
+        float speedMultiplier = UpgradesManager.Instance.TotalSpeedMultiplier;
+        CurrentSpeed = moveSpeed * (isSprinting ? sprintMultiplier : 1f) * speedMultiplier;
     }
 
-    void HandleGravityAndJump()
+    private void HandleGravityAndJump()
     {
         if (isGrounded && velocity.y < 0)
-        {
-            velocity.y = -2f; // Small force to maintain contact with the surface
-        }
+            velocity.y = -2f; // Keeps the character grounded
 
         if (isGrounded && isJumpPressed)
         {
@@ -119,4 +118,21 @@ public class PlayerControllerInput : MonoBehaviour
 
         velocity.y += gravity * Time.deltaTime;
     }
+
+    #endregion
+
+    #region Inventory Toggle
+
+    private void ToggleInventory()
+    {
+
+        if (InventoryUIManager.Instance.isInventoryOpen())
+
+            InventoryUIManager.Instance.CloseInventory();
+        else
+
+            InventoryUIManager.Instance.OpenInventory();
+    }
+
+    #endregion
 }

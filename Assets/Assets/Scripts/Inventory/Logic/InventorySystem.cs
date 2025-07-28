@@ -9,8 +9,7 @@ public class InventorySystem : MonoBehaviour
     public int MaxLimit = 18;
     public int ExpansionSize = 4;
 
-    private List<InventorySlot> slots = new();
-    public IReadOnlyList<InventorySlot> Slots => slots;
+    public List<InventorySlot> slots = new();
 
     public delegate void InventoryChanged();
     public event InventoryChanged OnInventoryChanged;
@@ -78,17 +77,6 @@ public class InventorySystem : MonoBehaviour
             OnInventoryChanged?.Invoke();
         }
     }
-
-    /*public void SwapSlots(int indexA, int indexB)
-    {
-        if (indexA >= slots.Count || indexB >= slots.Count) return;
-
-        var temp = slots[indexA];
-        slots[indexA] = slots[indexB];
-        slots[indexB] = temp;
-
-        OnInventoryChanged?.Invoke();
-    }*/
 
     public void SwapSlots(int indexA, int indexB)
     {
